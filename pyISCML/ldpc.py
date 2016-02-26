@@ -4,7 +4,7 @@ import os
 
 from numpy.random import RandomState
 
-import ._pyISCML
+import _pyISCML
 
 def InitializeWiMaxLDPC(rate, codedLength):
     rateDict = {}
@@ -30,7 +30,7 @@ def Encode(bits, H_rows, P):
     nldpc = bits.shape[0] + H_rows.shape[0]
     encoded = np.zeros(nldpc, dtype=np.int32)
 
-    codingExt.ldpcEncode(bits, H_rows.T.copy(), P.T.copy(), encoded)
+    _pyISCML.ldpcEncode(bits, H_rows.T.copy(), P.T.copy(), encoded)
 
     return encoded
 
@@ -43,7 +43,7 @@ def MpDecode(llr, H_rows, H_cols, max_iter, dec_type, r_scale_factor=1, q_scale_
 
 
 
-    codingExt.MpDecode(llr, H_rows.T.copy(), H_cols.T.copy(),
+    _pyISCML.MpDecode(llr, H_rows.T.copy(), H_cols.T.copy(),
                        max_iter, dec_type, r_scale_factor, q_scale_factor,
                        bits,
                        llrOut,

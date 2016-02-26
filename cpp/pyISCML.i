@@ -1,4 +1,4 @@
-%module codingExt
+%module pyISCML
 %{
    #define SWIG_FILE_WITH_INIT
   extern "C" void ldpcEncode(int* bits, int sizeBits,
