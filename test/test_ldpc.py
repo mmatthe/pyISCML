@@ -41,6 +41,30 @@ class MpDecodeLikeMatlab(unittest.TestCase):
             if f.startswith('MpDecode'):
                 self._testFile(f)
 
+class TestEncodeDecode(unittest.TestCase):
+    def _testEncDec(self, rate, ln, dec_type):
+        (H_rows, H_cols, P) = ldpc.InitializeWiMaxLDPC(rate, ln)
+        payload = (np.random.randn(rate * ln) < 0).astype(int)
+
+        encoded = ldpc.Encode(payload, H_rows, P)
+        llr = 1-2*encoded
+        llr[2] *= -1
+        llr[50] *= -1
+
+        (decoded, errors) = ldpc.MpDecode(4*llr, H_rows, H_cols,
+                                          max_iter=100, dec_type=0, r_scale_factor=1, q_scale_factor=1)
+        nt.assert_array_equal(decoded[-1,:], encoded)
+        nt.assert_array_equal(decoded[-1, :rate*ln], payload)
+
+    def test_1(self):
+        rate = 5./6.
+        ln = 2304
+
+        for rate in [1./2., 3./4., 5./6.]:
+            for dec_type in [0, 1]:
+                self._testEncDec(rate, ln, dec_type)
+
+
 
 if __name__ == '__main__':
     # print "Attach debugger and press Enter"
