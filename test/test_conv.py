@@ -45,6 +45,35 @@ class TestSisoDecode_SameAsMatlab(unittest.TestCase):
             self._check(nr+1)
 
 
+class TestEncodeDecode(unittest.TestCase):
+    def _testEncDec(self, payload, g, code_type, decoder_type):
+        payload = payload.astype(int)
+        encoded = convolutional.Encode(payload, g, code_type)
+        llr = 1 - 2*encoded
+        decoded_u, decoded_c = convolutional.SisoDecode(llr, g, code_type, decoder_type)
+
+        decodedBits = (decoded_u < 0).astype(int)
+        decodedCode = (decoded_c < 0).astype(int)
+        nt.assert_array_equal(payload, decodedBits)
+        nt.assert_array_equal(encoded, decodedCode)
+
+
+    def test_halfRate(self):
+        g = np.array([[1, 0, 0, 1, 1],
+                      [1, 1, 0, 1, 0]])
+        for code_type in [0, 1]:
+            for decoder_type in range(5):
+                self._testEncDec(np.random.randn(1000) < 0, g, code_type=0, decoder_type=1)
+
+    def test_thirdRateRate(self):
+        g = np.array([[1, 0, 0, 1, 1],
+                      [1, 1, 0, 1, 0],
+                      [1, 0, 1, 0, 1]])
+        for code_type in [0, 1]:
+            for decoder_type in range(5):
+                self._testEncDec(np.random.randn(1000) < 0, g, code_type=0, decoder_type=1)
+
+
 
 
 if __name__ == '__main__':
