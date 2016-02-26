@@ -5,7 +5,7 @@ import numpy.testing as nt
 import os
 
 from pyISCML import convolutional
-from .testing import assert_array_equal_ignorenan
+from .utils import assert_array_equal_ignorenan
 
 class TestConvEncode_SameAsMatlab(unittest.TestCase):
     def _check(self, nr):

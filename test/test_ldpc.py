@@ -3,7 +3,7 @@ from scipy.io import loadmat
 import os
 import numpy.testing as nt
 import numpy as np
-from .testing import assert_array_equal_ignorenan
+from .utils import assert_array_equal_ignorenan
 
 import pyISCML.ldpc as ldpc
 
